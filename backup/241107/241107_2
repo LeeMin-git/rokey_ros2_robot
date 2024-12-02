@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+import sys
+import rclpy
+import threading
+from serving_robot.Ui import Ui_Form
+from PyQt5.QtWidgets import QWidget,QApplication
+from serving_robot_msgs.srv import T2C #테이블 오더에서 컨트롤러(주방)으로 보내는 메시지
+from rclpy.node import Node
+from PyQt5.QtCore import pyqtSignal
+
+
+class Rosnode(Node):
+    def __init__(self,gui):
+        super().__init__('ttt')
+        self.gui=gui
+        self.oder_server=self.create_service(T2C,'/test',self.callback)
+        self.tatal_data=''
+
+
+    def callback(self,req,res):
+        self.table_number = req.table_number
+        self.menu = req.menu
+        self.menu_number = req.menu_number
+        self.price = req.price
+        self.get_logger().info(str(self.table_number))
+        for i in range(len(self.menu)):
+            self.tatal_data+=(self.menu[i]+' '+str(self.menu_number[i])+'\n')
+        self.gui.update_signal.emit(self.tatal_data)
+        res.succeed = True
+        return res
+
+class Mainwindow(QWidget):
+    update_signal=pyqtSignal(str)
+    def __init__(self):
+        super().__init__()
+        self.ui_setup=Ui_Form()
+        self.ui_setup.setupUi(self)
+        self.setWindowTitle('Kitchen GUI')
+        self.update_signal.connect(self.display)
+
+        rclpy.init()
+        self.node = Rosnode(self)
+        self.thread = threading.Thread(target=rclpy.spin, args=(self.node, ))
+        self.thread.start()
+    
+    def display(self,msg):
+        self.ui_setup.textBrowser_table_2.setText(msg)
+
+        
+def main():
+    app=QApplication(sys.argv)
+    window=Mainwindow()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,14 @@
+# Goal
+string location   # Target location name
+float32 wait_time # Time to wait at location in seconds
+---
+# Result
+bool success
+string message
+string final_location
+float32 total_time
+---
+# Feedback
+string current_state
+float32 time_elapsed
+string current_location
