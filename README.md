@@ -1,2 +1,2 @@
-# ros2_and_manipulator
-rokey 교육 3주차
+# rokey_ros2_robot
+rokey 교육 1주차
