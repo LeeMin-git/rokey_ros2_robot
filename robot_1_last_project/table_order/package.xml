@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>table_order</name>
+  <version>0.0.0</version>
+  <description>Table order package for ROS 2 interface with PyQt5.</description>
+  <maintainer email="soobgg773@gmail.com">psb</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Runtime dependencies -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>PyQt5</exec_depend>
+  <exec_depend>table_order_interface</exec_depend>
+
+  <!-- Testing dependencies -->
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
